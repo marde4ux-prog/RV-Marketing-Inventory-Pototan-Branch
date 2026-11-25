@@ -1,0 +1,231 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RV Marketing Inventory</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="logo">RV</div>
+    <div>
+      <h2>RV MARKETING-POTOTAN BRANCH</h2>
+      <small>APPLIANCES & FURNITURE INVENTORY</small>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <button class="active" data-tab="dashboard">Dashboard</button>
+  <button data-tab="stockin">Stock IN</button>
+  <button data-tab="stockout">Stock OUT</button>
+  <button data-tab="inventory">Inventory</button>
+  <button data-tab="reports">Reports</button>
+</nav>
+
+<main>
+
+<section id="dashboard" class="tab active">
+  <h2>Inventory Dashboard</h2>
+
+  <div class="stats">
+    <div class="stat">
+      <small>Total Units</small>
+      <h2 id="totalUnits">0</h2>
+    </div>
+    <div class="stat">
+      <small>Available Stock</small>
+      <h2 id="available">0</h2>
+    </div>
+    <div class="stat">
+      <small>Released Stock</small>
+      <h2 id="released">0</h2>
+    </div>
+    <div class="stat">
+      <small>Total Stock Value</small>
+      <h2 id="stockValue">₱0.00</h2>
+    </div>
+  </div>
+
+  <h3>Recent Transactions</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Product Code</th>
+          <th>Brand / Model</th>
+          <th>Serial Number</th>
+          <th>Transaction</th>
+        </tr>
+      </thead>
+      <tbody id="recentTable"></tbody>
+    </table>
+  </div>
+</section>
+
+<section id="stockin" class="tab">
+  <h2>Stock IN – Receiving Form</h2>
+
+  <form id="stockInForm">
+    <div class="form-grid">
+
+      <label>Product Code *
+        <input name="code" required placeholder="e.g. REF-001">
+      </label>
+
+      <label>Branch / Supplier / Name of Customer   *
+        <input name="supplier" required>
+      </label>
+
+      <label>Warehouse Charge Number *
+        <input name="chargeIn">
+      </label>
+
+      <label>Warehouse Receipt Number *
+        <input name="receipt">
+      </label>
+
+      <label>Date Stock-In *
+        <input type="date" name="dateIn" required>
+      </label>
+
+      <label>Brand *
+        <input name="brand" required>
+      </label>
+
+      <label>Model *
+        <input name="model" required>
+      </label>
+
+      <label>Serial Number *
+        <input name="serial" required>
+      </label>
+
+      <label>Price per Unit (₱) *
+        <input type="number" name="price" min="0" step="0.01" required>
+      </label>
+
+    </div>
+
+    <button class="primary" type="submit">SAVE STOCK IN</button>
+    <button class="secondary" type="reset">CLEAR FORM</button>
+  </form>
+</section>
+
+<section id="stockout" class="tab">
+  <h2>Stock OUT – Release Form</h2>
+
+  <form id="stockOutForm">
+    <div class="form-grid">
+
+      <label>Select Product / Serial Number *
+        <select name="unitId" id="unitSelect" required>
+          <option value="">Select Available Unit</option>
+        </select>
+      </label>
+
+      <label>Date Stock-Out *
+        <input type="date" name="dateOut" required>
+      </label>
+
+      <label>Delivery Receipt Number *
+        <input name="deliveryReceipt">
+      </label>
+
+      <label>Warehouse Charge Number *
+        <input name="chargeOut">
+      </label>
+
+      <label>Name of Customer / Branch *
+        <input name="customer" required>
+      </label>
+
+    </div>
+
+    <div id="selectedDetails" class="details"></div>
+
+    <button class="danger" type="submit">RELEASE STOCK OUT</button>
+    <button class="secondary" type="reset">CLEAR FORM</button>
+  </form>
+</section>
+
+<section id="inventory" class="tab">
+  <h2>Inventory Records</h2>
+
+  <input id="search" placeholder="Search Product Code, Brand, Model, Serial Number, Supplier or Customer...">
+
+  <div class="filters">
+    <select id="statusFilter">
+      <option value="All">All Status</option>
+      <option value="Available">Available</option>
+      <option value="Released">Released</option>
+    </select>
+    <button class="secondary" onclick="exportCSV()">EXPORT CSV</button>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Product Code</th>
+          <th>Supplier / Branch</th>
+          <th>Brand</th>
+          <th>Model</th>
+          <th>Serial Number</th>
+          <th>Price</th>
+          <th>Date IN</th>
+          <th>Date OUT</th>
+          <th>Customer / Branch</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="inventoryTable"></tbody>
+    </table>
+  </div>
+</section>
+
+<section id="reports" class="tab">
+  <h2>Inventory Reports</h2>
+
+  <div class="stats">
+    <div class="stat">
+      <small>Total Stock IN</small>
+      <h2 id="reportIn">0</h2>
+    </div>
+    <div class="stat">
+      <small>Total Stock OUT</small>
+      <h2 id="reportOut">0</h2>
+    </div>
+    <div class="stat">
+      <small>Available Units</small>
+      <h2 id="reportAvailable">0</h2>
+    </div>
+  </div>
+
+  <label>Report Type</label>
+  <select id="reportType">
+    <option value="All">All Transactions</option>
+    <option value="Stock IN">Stock IN Only</option>
+    <option value="Stock OUT">Stock OUT Only</option>
+  </select>
+
+  <button class="primary" onclick="printReport()">PRINT REPORT</button>
+
+  <div id="printArea"></div>
+</section>
+
+</main>
+
+<footer>
+  RV Marketing © 2026 | Inventory Management System
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
